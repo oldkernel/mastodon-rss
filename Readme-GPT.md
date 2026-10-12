@@ -119,7 +119,7 @@ Il feed è attualmente generato a ogni richiesta, interrogando Mastodon in tempo
 ## 9. Note tecniche
 
 - `uv` gestisce interpreti, ambienti virtuali e dipendenze.
-- `uvx` esegue strumenti Python senza richiedere necessariamente un'installazione permanente nel progetto.
+- `uvx` (abbreviazione di "uv tool run") esegue strumenti Python senza richiedere necessariamente un'installazione permanente nel progetto.
 - Il runtime Python di Workers utilizza un ambiente WebAssembly: alcuni moduli specifici di Workers non possono essere importati ed eseguiti direttamente con il normale interprete Python locale.
 - La configurazione locale di sviluppo è distinta dalla pubblicazione effettiva su Cloudflare.
 
@@ -128,6 +128,19 @@ Per creare il progetto python:
 
 Per provare il worker
 `uv run pywrangler dev`
+
+Per installare nell'ambiente del progetto python
+`uv python install 3.12`
+
+```
+paolo@fedora:~/bin/python/mastodon-rss$ uv python list
+cpython-3.14.7-linux-x86_64-gnu          /usr/bin/python3.14
+cpython-3.14.7-linux-x86_64-gnu          /usr/bin/python3 -> python3.14
+cpython-3.14.7-linux-x86_64-gnu          /usr/bin/python -> ./python3
+pyodide-3.14.2-emscripten-wasm32-musl    /home/paolo/.local/share/uv/python/pyodide-3.14.2-emscripten-wasm32-musl/python
+cpython-3.12.14-linux-x86_64-gnu         /home/paolo/.local/bin/python3.12 -> /home/paolo/.local/share/uv/python/cpython-3.12-linux-x86_64-gnu/bin/python3.12
+cpython-3.12.14-linux-x86_64-gnu         /home/paolo/.local/share/uv/python/cpython-3.12-linux-x86_64-gnu/bin/python3.12
+```
 
 Documentazione sui python worker
 https://developers.cloudflare.com/workers/languages/python/
@@ -209,3 +222,29 @@ id = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
 L'ID sarà necessario per collegare l'archivio al Worker tramite `wrangler.jsonc`.
 
+### Deploy su cloudflare
+paolo@fedora:~/bin/python/mastodon-rss$ uv run pywrangler deploy
+INFO     Passing command to npx wrangler: npx --yes wrangler deploy                                                                                           
+
+ ⛅️ wrangler 4.149.0
+────────────────────
+Attaching additional modules:
+┌────────────────────┬────────┬────────────┐
+│ Name               │ Type   │ Size       │
+├────────────────────┼────────┼────────────┤
+│ submodule.py       │ python │ 0.05 KiB   │
+├────────────────────┼────────┼────────────┤
+│ Vendored Modules   │        │ 107.52 KiB │
+├────────────────────┼────────┼────────────┤
+│ Total (31 modules) │        │ 107.57 KiB │
+└────────────────────┴────────┴────────────┘
+Total Upload: 113.47 KiB / gzip: 32.12 KiB
+Worker Startup Time: 767 ms
+Your Worker has access to the following bindings:
+Binding                                                Resource          
+env.FEED_CACHE (f15821b555704e19b52ca9afbb39ecfa)      KV Namespace      
+
+Uploaded mastodon-rss (7.95 sec)
+Deployed mastodon-rss triggers (1.99 sec)
+  https://mastodon-rss.macchia.workers.dev
+Current Version ID: 517c8a92-4e2e-4995-aa94-9509a2f9f025
