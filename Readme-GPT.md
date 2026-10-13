@@ -255,3 +255,7 @@ In sintesi: un Worker, un namespace KV, tante chiavi di cache quante sono le com
 Quindi il worker è multihashtag pur essendo un singolo worker e con un solo namespace, il segreto sta nell'inizializzare diverse chiavi di cache:
 `cache_key = f"feed:{hashtag.lower()}:{language}"`
 
+Tra l'altro la cache del namespace si può vedere sulla console di Cloudflare nella sezione 
+Storage & databases -> Workers KV
+
+
