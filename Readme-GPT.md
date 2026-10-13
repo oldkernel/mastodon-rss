@@ -248,3 +248,10 @@ Uploaded mastodon-rss (7.95 sec)
 Deployed mastodon-rss triggers (1.99 sec)
   https://mastodon-rss.macchia.workers.dev
 Current Version ID: 517c8a92-4e2e-4995-aa94-9509a2f9f025
+
+
+# Una nota importante:
+In sintesi: un Worker, un namespace KV, tante chiavi di cache quante sono le combinazioni di hashtag e lingua richieste. E puoi aggiungere nuovi hashtag semplicemente usando URL diversi, senza modificare il codice o creare altri Worker. 
+Quindi il worker è multihashtag pur essendo un singolo worker e con un solo namespace, il segreto sta nell'inizializzare diverse chiavi di cache:
+`cache_key = f"feed:{hashtag.lower()}:{language}"`
+
